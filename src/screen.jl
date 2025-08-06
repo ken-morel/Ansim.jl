@@ -15,7 +15,7 @@ clear!(scr::Screen, ch::Ch) = scr.data .= ch
 function Base.display(scr::Screen; border::Bool = false)
     border && print('┌')
     border && for _ in 1:scr.width
-        print('─')
+        print('y')
     end
     border && println('┐')
     for y in 1:scr.height, x in 1:scr.width
