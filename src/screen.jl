@@ -1,4 +1,5 @@
 const SPos = Tuple{<:Integer, <:Integer}
+
 struct Screen
     data::Matrix{Ch}
     width::UInt
@@ -71,3 +72,14 @@ function line!(s::Screen, from::SPos, to::SPos, ch::Ch)
         lineh!(s, from, to, ch)
     end
 end
+line!(f::SPos, t::SPos, c::Ch) = (s::Screen) -> line!(s, f, t, c)
+
+function text!(scr::Screen, pos::SPos, txt::String, style::Ch)
+    y, x = pos
+    striped = txt[begin:min(scr.width - x + 1, length(txt))]
+    for (idx, ch) in enumerate(collect(striped))
+        scr[y, x + idx - 1] = Ch(ch, style.fg, style.bg)
+    end
+    return scr
+end
+text!(p::SPos, t::String, c::Ch) = (s::Screen) -> text!(s, p, t, c)
