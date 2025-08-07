@@ -4,7 +4,9 @@ version = "0.1.0"
 authors = ["Engon Ken Morel <engonken8@gmail.com>"]
 
 [deps]
+REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 
 [compat]
+REPL = "1.11.0"
 Revise = "3.8.1"

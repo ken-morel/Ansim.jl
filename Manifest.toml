@@ -2,9 +2,10 @@
 
 julia_version = "1.13.0-DEV"
 manifest_format = "2.0"
-project_hash = "6212c41f0194d71b90be71e2b59a8d4475380b2a"
+project_hash = "2656f621b45ad4c521d4182658b650adf3c54c5c"
 
 [[deps.Ansim]]
+deps = ["Revise"]
 path = "."
 uuid = "d95b3f39-30ea-4f44-875b-c3bf67c50329"
 version = "0.1.0"

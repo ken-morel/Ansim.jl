@@ -1,3 +1,5 @@
+using .Ansi: fg_code, bg_code, RESET_ALL
+
 struct Screen
     data::Matrix{Ch}
     width::UInt
@@ -21,21 +23,35 @@ Base.size(s::Screen) = (s.height, s.width)
 clear!(scr::Screen, ch::Ch = Ch()) = scr.data .= ch
 
 function Base.display(scr::Screen; border::Bool = false)
-    border && print(BoxChars.TL)
-    border && for _ in 1:scr.width
-        print(BoxChars.H)
+    buffer = IOBuffer()
+    last_fg::Color = nothing
+    last_bg::Color = nothing
+
+    border && print(buffer, BoxChars.TL, repeat(BoxChars.H, scr.width), BoxChars.TR, "\n")
+
+    for y in 1:scr.height
+        border && print(buffer, BoxChars.V)
+        for x in 1:scr.width
+            ch = scr[y, x]
+            if ch.fg != last_fg
+                print(buffer, fg_code(ch.fg))
+                last_fg = ch.fg
+            end
+            if ch.bg != last_bg
+                print(buffer, bg_code(ch.bg))
+                last_bg = ch.bg
+            end
+            print(buffer, ch.ch)
+        end
+        print(buffer, RESET_ALL)
+        last_fg = last_bg = nothing # Reset state for next line
+        border && print(buffer, BoxChars.V)
+        print(buffer, "\n")
     end
-    border && println(BoxChars.TR)
-    for y in 1:scr.height, x in 1:scr.width
-        x == 1 && border && print(BoxChars.V)
-        display(scr[y, x])
-        x === scr.width && print(border ? BoxChars.V * "\n" : "\n")
-    end
-    border && print(BoxChars.BL)
-    border && for _ in 1:scr.width
-        print(BoxChars.H)
-    end
-    border && print(BoxChars.BR)
+
+    border && print(buffer, BoxChars.BL, repeat(BoxChars.H, scr.width), BoxChars.BR)
+
+    print(String(take!(buffer)))
     return
 end
 
