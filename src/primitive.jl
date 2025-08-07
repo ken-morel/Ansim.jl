@@ -19,8 +19,3 @@ mutable struct HLine <: ShapePrimitive
 end
 hline(y::Integer, x::Integer, w::Integer, c::Ch = Ch('─')) = HLine((y, x), w, c)
 drawon(ln::HLine, scr::Screen) = lineh!(scr, ln.pos, (ln.pos[1], ln.pos[2] + ln.width), ln.ch)
-
-mutable struct Box <: ShapePrimitive
-    pos::SPos
-    size::SPos
-end
