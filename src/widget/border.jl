@@ -14,6 +14,16 @@ simple_border(col::Color = NoColor(true)) = Border(
     ),
 )
 
+rounded_border(col::Color = NoColor(true)) = Border(
+    col,
+    nothing,
+    (
+        BoxChars.ROUNDED_TOP_LEFT, BoxChars.ROUNDED_TOP_RIGHT,
+        BoxChars.H, BoxChars.V,
+        BoxChars.ROUNDED_BOTTOM_LEFT, BoxChars.ROUNDED_BOTTOM_RIGHT,
+    ),
+)
+
 function drawborder!(scr::Screen, border::Border, rect::Rect)
     h, w = rect.size
     (h <= 0 || w <= 0)  && Rect(rect.pos, (0, 0))
@@ -27,7 +37,7 @@ function drawborder!(scr::Screen, border::Border, rect::Rect)
     if h > 1 && w > 1
         xr = (bx + 1):(ex - 1)
         yr = (by + 1):(ey - 1)
-        println(Int.(xr), " and ", Int.(yr))
+
         scr.data[by, bx] = chars[1]    # top left
         scr.data[by, xr] .= chars[3]   # top
         scr.data[by, ex] = chars[2]    # top right

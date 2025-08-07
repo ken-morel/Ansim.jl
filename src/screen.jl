@@ -5,6 +5,12 @@ struct Screen
     Screen(w::Integer, h::Integer) = new(Matrix{Ch}(undef, h, w), w, h)
 end
 
+function resize(scr::Screen, dms::SPos)
+    new = screen(dms)
+    blit!(new, scr, (1, 1))
+    return new
+end
+
 getrect(s::Screen) = Rect((1, 1), (s.height, s.width))
 
 
@@ -12,7 +18,7 @@ Base.getindex(s::Screen, y::Integer, x::Integer) = s.data[y, x]
 Base.setindex!(s::Screen, c::Ch, y::Integer, x::Integer) = s.data[y, x] = c
 Base.size(s::Screen) = (s.height, s.width)
 
-clear!(scr::Screen, ch::Ch) = scr.data .= ch
+clear!(scr::Screen, ch::Ch = Ch()) = scr.data .= ch
 
 function Base.display(scr::Screen; border::Bool = false)
     border && print(BoxChars.TL)
@@ -38,11 +44,27 @@ function screen(w::Integer, h::Integer, ch::Ch = Ch())
     clear!(scr, ch)
     return scr
 end
+screen(p::SPos, ch::Ch = Ch()) = screen(p[2], p[1], ch)
 
 function blit!(scr::Screen, paint::Screen, pos::SPos)
     by, bx = pos
-    ey, ex = by + paint.height, bx + paint.width
-    return scr.data[(by:ey:bx):ex] = paint.data
+    src_h, src_w = size(paint)
+    dst_h, dst_w = size(scr)
+
+    # Determine the overlapping region
+    copy_h = min(dst_h - by + 1, src_h)
+    copy_w = min(dst_w - bx + 1, src_w)
+
+    # Ensure we don't try to copy negative dimensions
+    (copy_h <= 0 || copy_w <= 0) && return scr
+
+    src_y_range = 1:copy_h
+    src_x_range = 1:copy_w
+    dst_y_range = by:(by + copy_h - 1)
+    dst_x_range = bx:(bx + copy_w - 1)
+
+    scr.data[dst_y_range, dst_x_range] = paint.data[src_y_range, src_x_range]
+    return scr
 end
 
 

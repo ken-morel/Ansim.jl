@@ -5,6 +5,7 @@ mutable struct Label <: Widget
     border::Union{Border, Nothing}
     padding::EdgeConstraints
     margin::EdgeConstraints
+    justify::Justify
 end
 
 label(
@@ -14,13 +15,23 @@ label(
     border::Union{Border, Nothing} = nothing,
     padding::EdgeConstraints = (0, 0, 0, 0),
     margin::EdgeConstraints = (0, 0, 0, 0),
-) = Label(t, fg, bg, border, padding, margin)
+    justify::Justify = J_Left
+) = Label(t, fg, bg, border, padding, margin, justify)
 
 function draw!(scr::Screen, lbl::Label, rect::Union{Rect, Nothing} = nothing)
     rect = drawoutline!(scr, lbl, rect)
     lines = wrap(lbl.text, rect.size[2])
     lines = lines[1:min(length(lines), rect.size[1])]
+    width = rect.size[2]
+    lines = if lbl.justify == J_Right
+        rpad.(lines, width)
+    elseif lbl.justify == J_Center
+        cpad.(lines, width)
+    else
+        lines # already left padded
+    end
     for (idx, ln) in enumerate(lines)
+
         text!(scr, (idx + rect.pos[1] - 1, rect.pos[2]), ln, lbl.fg, lbl.bg)
     end
     return scr
