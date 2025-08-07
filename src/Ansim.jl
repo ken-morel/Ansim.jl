@@ -12,6 +12,9 @@ include("primitive.jl")
 
 include("widget/widget.jl")
 
+include("terminal.jl")
+include("app.jl")
+
 
 include("main.jl")
 

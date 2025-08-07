@@ -1,4 +1,4 @@
-function (@main)(::Vector{String})::Int
+function welcome_page()
     lbl = label(
         "Hello world, what is your name?";
         margin = (1, 1, 1, 1),
@@ -7,7 +7,11 @@ function (@main)(::Vector{String})::Int
         justify = J_Right,
         fg = TrueColor(52, 52, 152)
     )
-    scr = screen(15, 10)
+
+    return Page(lbl)
+end
+function (@main)(::Vector{String})::Int
+    lbl = scr = screen(15, 10)
     draw!(scr, lbl)
     display(scr; border = true)
     return 0

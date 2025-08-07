@@ -1,4 +1,4 @@
-using .Ansi: fg_code, bg_code, RESET_ALL
+using .Ansi: fg_code, bg_code, STYLE_RESET_ALL
 
 struct Screen
     data::Matrix{Ch}
@@ -43,7 +43,7 @@ function Base.display(scr::Screen; border::Bool = false)
             end
             print(buffer, ch.ch)
         end
-        print(buffer, RESET_ALL)
+        print(buffer, STYLE_RESET_ALL)
         last_fg = last_bg = nothing # Reset state for next line
         border && print(buffer, BoxChars.V)
         print(buffer, "\n")
