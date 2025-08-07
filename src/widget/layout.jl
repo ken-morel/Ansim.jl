@@ -8,7 +8,6 @@ function draw!(scr::Screen, lay::Layout, rect::Union{Rect, Nothing} = nothing)
     return draw!(scr, lay.child, rect)
 end
 
-const EdgeConstraints = NTuple{4, Int}
 
 function drawoutline!(scr::Screen, wid::Widget, rect::Union{Rect, Nothing})
     if isnothing(rect)

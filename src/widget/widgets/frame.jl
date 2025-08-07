@@ -4,6 +4,7 @@ mutable struct Frame <: Widget
 end
 
 function draw!(scr::Screen, wf::Frame, rect::Union{Rect, Nothing} = nothing)
+    rect = drawoutline!(scr, lbl, rect)
     return draw!(scr, wf.content, rect)
 end
 

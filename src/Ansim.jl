@@ -2,9 +2,9 @@ module Ansim
 
 include("BoxChars.jl")
 
+include("rect.jl")
 include("term.jl")
 include("screen.jl")
-include("rect.jl")
 
 include("primitive.jl")
 

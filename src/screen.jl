@@ -1,5 +1,3 @@
-const SPos = Tuple{<:Integer, <:Integer}
-
 struct Screen
     data::Matrix{Ch}
     width::UInt

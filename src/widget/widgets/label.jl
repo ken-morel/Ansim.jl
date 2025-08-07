@@ -2,12 +2,19 @@ mutable struct Label <: Widget
     text::String
     fg::Color
     bg::Color
-    border::Border
+    border::Union{Border, Nothing}
     padding::EdgeConstraints
     margin::EdgeConstraints
 end
 
-label(t::String) = Label(t, NoColor(true), nothing)
+label(
+    t::String;
+    fg::Union{Color, Nothing} = NoColor(true),
+    bg::Union{Color, Nothing} = nothing,
+    border::Union{Border, Nothing} = nothing,
+    padding::EdgeConstraints = (0, 0, 0, 0),
+    margin::EdgeConstraints = (0, 0, 0, 0),
+) = Label(t, fg, bg, border, padding, margin)
 
 function draw!(scr::Screen, lbl::Label, rect::Union{Rect, Nothing} = nothing)
     rect = drawoutline!(scr, lbl, rect)
