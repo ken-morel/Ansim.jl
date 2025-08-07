@@ -4,7 +4,7 @@ function (@main)(::Vector{String})::Int
         margin = (1, 1, 1, 1),
         padding = (1, 1, 1, 1),
         border = rounded_border(),
-        justify = J_Center
+        justify = J_Right
     )
     scr = screen(15, 10)
     draw!(scr, lbl)

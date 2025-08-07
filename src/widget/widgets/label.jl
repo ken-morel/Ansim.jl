@@ -24,7 +24,7 @@ function draw!(scr::Screen, lbl::Label, rect::Union{Rect, Nothing} = nothing)
     lines = lines[1:min(length(lines), rect.size[1])]
     width = rect.size[2]
     lines = if lbl.justify == J_Right
-        rpad.(lines, width)
+        lpad.(lines, width)
     elseif lbl.justify == J_Center
         cpad.(lines, width)
     else
